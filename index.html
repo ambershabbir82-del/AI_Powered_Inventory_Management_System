@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StockPilot | AI Inventory</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<div class="app-shell">
+  <aside class="sidebar">
+    <div class="brand"><span class="brand-mark">S</span><span>StockPilot<small>SMART INVENTORY</small></span></div>
+    <div class="side-label">WORKSPACE</div>
+    <a class="nav-item active" href="#"><span>▦</span> Overview</a>
+    <a class="nav-item" href="#inventory"><span>▤</span> Products</a>
+    <a class="nav-item" href="#ai-tools"><span>✧</span> AI Assistant</a>
+    <div class="sidebar-bottom"><div class="status-dot"></div><span>Inventory system ready</span></div>
+  </aside>
+  <main class="main">
+    <header class="topbar"><div><div class="eyebrow">INVENTORY / OVERVIEW</div><h1>Good day <span class="wave">✦</span></h1><p class="subheading">Here's what's happening with your inventory today.</p></div><div class="top-pill"><span class="live-dot"></span> Live dashboard</div></header>
+    <section class="stats-grid">
+      <article class="stat-card"><div class="stat-top"><span>Total products</span><span class="stat-icon purple">▦</span></div><div class="stat-value" id="product-count">0</div><div class="stat-note">Unique items in catalog</div></article>
+      <article class="stat-card"><div class="stat-top"><span>Total units</span><span class="stat-icon blue">▤</span></div><div class="stat-value" id="total-units">0</div><div class="stat-note">Units currently in stock</div></article>
+      <article class="stat-card"><div class="stat-top"><span>Inventory value</span><span class="stat-icon green">$</span></div><div class="stat-value" id="inventory-value">$0.00</div><div class="stat-note">Based on current quantities</div></article>
+      <article class="stat-card"><div class="stat-top"><span>Low stock items</span><span class="stat-icon amber">!</span></div><div class="stat-value" id="low-stock">0</div><div class="stat-note">At or below reorder level</div></article>
+    </section>
+    <section class="content-grid" id="inventory">
+      <div class="panel inventory-panel">
+        <div class="panel-heading"><div><div class="eyebrow">CATALOG</div><h2>Product inventory</h2></div><button class="primary-btn" id="add-btn">＋ Add product</button></div>
+        <div class="table-tools"><input id="search" type="search" placeholder="⌕  Search products, IDs or categories..."><span id="product-total">0 products</span></div>
+        <div class="table-wrap"><table><thead><tr><th>PRODUCT</th><th>CATEGORY</th><th>PRICE</th><th>QUANTITY</th><th>STATUS</th><th>ACTIONS</th></tr></thead><tbody id="products-body"></tbody></table></div>
+        <div class="empty-state" id="empty-state" hidden>No products found. Add a product to get started.</div>
+      </div>
+      <div class="panel alerts-panel"><div class="panel-heading"><div><div class="eyebrow">ATTENTION</div><h2>Stock alerts</h2></div><span class="alert-count" id="alert-count">0</span></div><div id="alerts-list" class="alerts-list"></div></div>
+    </section>
+    <section class="panel ai-panel" id="ai-tools">
+      <div class="panel-heading"><div><div class="eyebrow">POWERED BY GROQ</div><h2>AI inventory assistant <span class="sparkle">✧</span></h2><p class="panel-sub">Get useful insights and answers from your current stock data.</p></div></div>
+      <div class="ai-actions"><button class="ai-card" data-ai="analyze"><span class="ai-icon">✧</span><strong>Analyze inventory</strong><small>Understand stock health and risks</small><span class="card-arrow">↗</span></button><button class="ai-card" data-ai="reorders"><span class="ai-icon">↻</span><strong>Suggest reorders</strong><small>Find products that need attention</small><span class="card-arrow">↗</span></button><button class="ai-card" id="description-btn"><span class="ai-icon">✎</span><strong>Write description</strong><small>Generate product copy with AI</small><span class="card-arrow">↗</span></button></div>
+      <div class="ask-row"><input id="ai-question" type="text" placeholder="Ask something, e.g. Which products are out of stock?"><button class="primary-btn" id="ask-btn">Ask AI <span>→</span></button></div>
+      <div id="ai-result" class="ai-result" hidden><div class="result-heading">AI RESPONSE</div><div id="ai-result-text"></div></div>
+    </section>
+    <footer>StockPilot <span>·</span> AI-powered inventory management <span class="footer-right">Built with Flask + Groq</span></footer>
+  </main>
+</div>
+<div class="modal-backdrop" id="modal" hidden><div class="modal"><div class="modal-head"><div><div class="eyebrow">PRODUCT DETAILS</div><h2 id="modal-title">Add product</h2></div><button class="close-btn" id="close-modal">×</button></div>
+<form id="product-form"><div class="form-grid">
+<label>Product ID *<input name="id" required placeholder="e.g. P1005"></label><label>Product name *<input name="name" required placeholder="Product name"></label>
+<label>Category *<input name="category" required placeholder="e.g. Electronics"></label><label>Price *<input name="price" required type="number" min="0" step="0.01" placeholder="0.00"></label>
+<label>Quantity *<input name="quantity" required type="number" min="0" step="1" placeholder="0"></label><label>Reorder level *<input name="reorder_level" required type="number" min="0" step="1" value="5"></label>
+<label class="full">Expiry date (optional)<input name="expiry_date" type="date"></label><label class="full">Description<textarea name="description" rows="2" placeholder="Short product details"></textarea></label>
+</div><div class="modal-actions"><button type="button" class="secondary-btn" id="cancel-modal">Cancel</button><button class="primary-btn" type="submit">Save product</button></div></form></div></div>
+<div class="toast" id="toast"></div>
+<script src="{{ url_for('static', filename='app.js') }}"></script>
+</body></html>
